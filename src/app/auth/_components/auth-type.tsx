@@ -1,4 +1,5 @@
 "use client";
+
 import { useSearchParams } from "next/navigation";
 
 import LoginLink from "@/components/auth/login-link";

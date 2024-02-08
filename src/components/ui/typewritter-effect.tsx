@@ -1,4 +1,5 @@
 "use client";
+
 import TP from "typewriter-effect";
 
 export const Typewriter = () => {

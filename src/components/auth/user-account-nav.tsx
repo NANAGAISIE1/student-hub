@@ -1,4 +1,5 @@
 "use client";
+
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { Loader2 } from "lucide-react";
