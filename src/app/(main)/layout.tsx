@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 
 import { Spinner } from "@/components/ui/spinner";
 
+import Sidebar from "./(routes)/spaces/_components/sidebar";
+
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useConvexAuth();
 
@@ -22,8 +24,9 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex h-screen">
-      {/* <Navigation /> */}
-      <main className="h-full flex-1 overflow-y-auto">
+      <Sidebar />
+
+      <main className="container h-full flex-1 overflow-y-auto">
         {/* <SearchCommand /> */}
 
         {children}
