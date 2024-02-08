@@ -22,7 +22,7 @@ const AuthenticatedLinks = (props: Props) => {
           <Separator />
         </>
       ))}
-      <li>
+      <li key={"Logout"}>
         <LogoutLink className="flex w-full items-center font-semibold text-destructive">
           Log out
         </LogoutLink>

@@ -10,15 +10,15 @@ type Props = {};
 const HeroSection = (props: Props) => {
   return (
     <>
-      <div className="flex flex-col items-center justify-center text-center">
+      <div className="relative flex flex-col items-center justify-center text-center">
         <HeroCopy />
         <SparklesCore
           id="tsparticlesfullpage"
           background="transparent"
           minSize={0.6}
           maxSize={1.4}
-          particleDensity={50}
-          className="block h-full w-full dark:hidden"
+          particleDensity={80}
+          className="absolute inset-0 block h-full w-full dark:hidden"
           particleColor={"#000000"}
         />
         <SparklesCore
@@ -26,8 +26,8 @@ const HeroSection = (props: Props) => {
           background="transparent"
           minSize={0.6}
           maxSize={1.4}
-          particleDensity={50}
-          className="hidden h-full w-full dark:block"
+          particleDensity={80}
+          className="absolute inset-0 hidden h-full w-full dark:block"
           particleColor={"#ffffff"}
         />
       </div>

@@ -36,8 +36,12 @@ const NavigationMenus = ({ className }: Props) => {
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="m-0 flex list-none flex-col justify-start gap-2 p-6 md:w-[200px] lg:w-[300px]">
-              <NormalSubmenu href="/docs" label="IOS & Android" />
-              <NormalSubmenu href="/docs" label="Mac & Windows" />
+              <li>
+                <NormalSubmenu href="/docs" label="IOS & Android" />
+              </li>
+              <li>
+                <NormalSubmenu href="/docs" label="Mac & Windows" />
+              </li>
               <li>
                 <NavigationMenuLink asChild>
                   <p className="p-leading">

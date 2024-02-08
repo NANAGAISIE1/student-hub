@@ -134,14 +134,14 @@ export default function RootLayout({
           enableSystem
           storageKey="smartnote-1"
         >
-          <EdgeStoreProvider>
-            <Kinde>
+          <Kinde>
+            <EdgeStoreProvider>
               <ConvexProviderWithKinde>
                 <Toaster />
                 {children}
               </ConvexProviderWithKinde>
-            </Kinde>
-          </EdgeStoreProvider>
+            </EdgeStoreProvider>
+          </Kinde>
         </ThemeProvider>
       </body>
     </html>

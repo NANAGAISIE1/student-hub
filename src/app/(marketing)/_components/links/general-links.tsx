@@ -22,19 +22,19 @@ const GeneralLinks = () => {
             <Separator />
           </>
         ))}
-      <li>
+      <li key={"Sign in"}>
         <Link
           className="flex w-full items-center font-semibold"
-          href="/sign-in"
+          href="/auth?prompt=login"
         >
           Sign in
         </Link>
       </li>
       <Separator />
-      <li>
+      <li key={"Register"}>
         <Link
           className="flex w-full items-center font-semibold text-primary"
-          href="/sign-up"
+          href="/auth?prompt=register"
         >
           Get started
           <ArrowRight className="ml-2 h-5 w-5" />
