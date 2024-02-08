@@ -1,11 +1,15 @@
 import { create } from "zustand";
 
-type SearchDialogState = {
-  open: boolean;
+type SearchStore = {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
   toggle: () => void;
 };
 
-export const useSearchDialog = create<SearchDialogState>((set) => ({
-  open: false,
-  toggle: () => set((state) => ({ open: !state.open })),
+export const useSearch = create<SearchStore>((set, get) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
+  toggle: () => set({ isOpen: !get().isOpen }),
 }));
