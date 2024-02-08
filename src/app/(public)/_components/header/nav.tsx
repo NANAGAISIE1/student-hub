@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   NavigationMenu,
@@ -12,6 +13,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { navigationLinks } from "@/constants/navigation-links";
+import { cn } from "@/lib/utils";
 
 type Props = {
   className: string;
@@ -28,6 +30,7 @@ const NormalSubmenu = ({ href, label }: { href: string; label: string }) => {
 };
 
 const NavigationMenus = ({ className }: Props) => {
+  const pathname = usePathname();
   return (
     <NavigationMenu className={className}>
       <NavigationMenuList>
@@ -48,7 +51,7 @@ const NavigationMenus = ({ className }: Props) => {
                   <p className="p-leading">
                     SmartNote is always at home right{" "}
                     <Link
-                      href={"/dashboard"}
+                      href={"/spaces"}
                       className="underline underline-offset-4 hover:text-primary"
                     >
                       in your browser
@@ -64,7 +67,13 @@ const NavigationMenus = ({ className }: Props) => {
           .map((nav) => (
             <NavigationMenuItem key={nav.href}>
               <Link href={nav.href} passHref legacyBehavior>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <NavigationMenuLink
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    pathname === nav.href &&
+                      "bg-secondary text-secondary-foreground",
+                  )}
+                >
                   {nav.title}
                 </NavigationMenuLink>
               </Link>

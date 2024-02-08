@@ -7,7 +7,7 @@ type NavLinkProps = {
 export const navigationLinks: NavLinkProps[] = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/spaces",
     type: "private",
   },
   {
