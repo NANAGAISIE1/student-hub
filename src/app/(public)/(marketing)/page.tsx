@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
-import FeaturesSection from "./_components/features";
-import HeroSection from "./_components/hero";
+import FeaturesSection from "../_components/features";
+import HeroSection from "../_components/hero";
 
 export default async function Home() {
   return (
