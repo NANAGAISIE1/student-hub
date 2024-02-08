@@ -53,7 +53,7 @@ const UserAccountNav = () => {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem asChild>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/spaces">Dashboard</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
 
