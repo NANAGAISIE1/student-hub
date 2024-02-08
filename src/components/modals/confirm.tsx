@@ -27,7 +27,12 @@ export const ConfirmModal = ({ children, onConfirm }: ConfirmModalProps) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger onClick={(e) => e.stopPropagation()} asChild>
+      <AlertDialogTrigger
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+          e.stopPropagation()
+        }
+        asChild
+      >
         {children}
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -38,7 +43,11 @@ export const ConfirmModal = ({ children, onConfirm }: ConfirmModalProps) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
+          <AlertDialogCancel
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+              e.stopPropagation()
+            }
+          >
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction onClick={handleConfirm}>Confirm</AlertDialogAction>
