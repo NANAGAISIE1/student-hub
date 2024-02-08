@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { LogoWithName } from "@/components/logos";
 import { SocialMediaLinks } from "@/components/social-media-links";
 import ThemeModeToggle from "@/components/theme-toggle";
 
@@ -10,12 +9,7 @@ export default function Footer() {
     <footer className="bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 md:grid-cols-2">
         <div className="flex flex-col items-center justify-center gap-6">
-          <Link
-            href="/"
-            className="flex items-center justify-center font-semibold text-primary"
-          >
-            Smartnote.
-          </Link>
+          <LogoWithName />
           <SocialMediaLinks />
         </div>
         <div className="space-y-6 md:col-span-1">

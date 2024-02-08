@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-import { Icons } from "@/components/icons";
+import { LogoWithName } from "@/components/logos";
 
 import Auth from "./auth";
 import MobileNav from "./mobile-nav";
@@ -12,13 +10,7 @@ const Header = async () => {
       <div className="container">
         <div className="flex h-14 items-center justify-between">
           <div className="flex items-center justify-between">
-            <Link
-              href="/"
-              className="flex items-center justify-center gap-2 font-semibold text-primary"
-            >
-              <Icons.logo className="fill-primary text-primary" />
-              <span>Smartnote.</span>
-            </Link>
+            <LogoWithName />
             <NavigationMenus className="hidden lg:flex" />
           </div>
 
