@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
@@ -9,16 +10,14 @@ import { cn } from "@/lib/utils";
 import { AuthCopy } from "./auth-copy";
 import { AuthTypeLink } from "./auth-type-link";
 import { Auth } from "../auth-type";
+import AuthFormSkeleton from "../skeleton";
 
 enum AuthTypes {
   LOGIN = "login",
   REGISTER = "register",
 }
 
-const AuthForm = () => {
-  const searchParams = useSearchParams();
-  const prompt = searchParams.get("prompt");
-
+const AuthForm = ({ prompt }: { prompt: string | null }) => {
   return (
     <>
       <div className="flex flex-col items-center justify-center space-y-2 text-center">
@@ -47,4 +46,14 @@ const AuthForm = () => {
   );
 };
 
-export default AuthForm;
+const Form = () => {
+  const searchParams = useSearchParams();
+  const prompt = searchParams.get("prompt");
+  return (
+    <Suspense key={prompt} fallback={<AuthFormSkeleton />}>
+      <AuthForm prompt={prompt} />
+    </Suspense>
+  );
+};
+
+export default Form;

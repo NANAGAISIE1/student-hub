@@ -2,23 +2,34 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
-  spaces: defineTable({
+  documents: defineTable({
     title: v.string(),
     userId: v.string(),
     isArchived: v.boolean(),
-    parentSpace: v.optional(v.id("spaces")),
+    parentDocument: v.optional(v.id("documents")),
     content: v.optional(v.string()),
     coverImage: v.optional(v.string()),
     icon: v.optional(v.string()),
     isPublished: v.boolean(),
-    editors: v.optional(v.array(v.string())),
   })
     .index("by_user", ["userId"])
-    .index("by_user_parent", ["userId", "parentSpace"])
+    .index("by_user_parent", ["userId", "parentDocument"])
+    .searchIndex("search_title", {
+      searchField: "title",
+      filterFields: ["userId", "isArchived"],
+    })
     .searchIndex("search_content", {
       searchField: "content",
       filterFields: ["userId", "isArchived", "isPublished"],
     }),
+
+  userFavorites: defineTable({
+    userId: v.string(),
+    documentId: v.id("documents"),
+  })
+    .index("by_document", ["documentId"])
+    .index("by_user", ["userId"])
+    .index("by_user_document", ["userId", "documentId"]),
 
   presence: defineTable({
     user: v.string(),

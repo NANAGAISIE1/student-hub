@@ -51,7 +51,7 @@ const NavigationMenus = ({ className }: Props) => {
                   <p className="p-leading">
                     SmartNote is always at home right{" "}
                     <Link
-                      href={"/spaces"}
+                      href={"/dashboard"}
                       className="underline underline-offset-4 hover:text-primary"
                     >
                       in your browser

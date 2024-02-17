@@ -27,7 +27,7 @@ const ButtonLink = () => {
     return (
       <>
         <Link
-          href="/spaces"
+          href="/dashboard"
           className={buttonVariants({
             variant: "ghost",
           })}

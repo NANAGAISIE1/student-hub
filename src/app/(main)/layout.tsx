@@ -1,14 +1,13 @@
 "use client";
 
 import { useConvexAuth } from "convex/react";
-import { redirect } from "next/navigation";
 
 import { Spinner } from "@/components/ui/spinner";
 
-import Sidebar from "./(routes)/spaces/_components/sidebar";
+import Sidebar from "./_components/sidebar";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useConvexAuth();
+  const { isLoading } = useConvexAuth();
 
   if (isLoading) {
     return (
@@ -18,20 +17,13 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!isAuthenticated) {
-    return redirect("/auth?prompt=login");
-  }
-
   return (
-    <div className="flex h-screen">
+    <main className="relative flex h-screen w-full flex-row">
       <Sidebar />
-
-      <main className="container h-full flex-1 overflow-y-auto">
-        {/* <SearchCommand /> */}
-
+      <section className="ml-20 flex w-full flex-col gap-5 p-10">
         {children}
-      </main>
-    </div>
+      </section>
+    </main>
   );
 };
 

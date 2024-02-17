@@ -1,10 +1,11 @@
 import { v } from "convex/values";
+import { getAllOrThrow } from "convex-helpers/server/relationships";
 
 import { Doc, Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 
 export const archive = mutation({
-  args: { id: v.id("spaces") },
+  args: { id: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
@@ -14,21 +15,21 @@ export const archive = mutation({
 
     const userId = identity.subject;
 
-    const existingSpace = await ctx.db.get(args.id);
+    const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingSpace) {
+    if (!existingDocument) {
       throw new Error("Not found");
     }
 
-    if (existingSpace.userId !== userId) {
+    if (existingDocument.userId !== userId) {
       throw new Error("Unauthorized");
     }
 
-    const recursiveArchive = async (spaceId: Id<"spaces">) => {
+    const recursiveArchive = async (documentId: Id<"documents">) => {
       const children = await ctx.db
-        .query("spaces")
+        .query("documents")
         .withIndex("by_user_parent", (q) =>
-          q.eq("userId", userId).eq("parentSpace", spaceId),
+          q.eq("userId", userId).eq("parentDocument", documentId),
         )
         .collect();
 
@@ -41,19 +42,19 @@ export const archive = mutation({
       }
     };
 
-    const space = await ctx.db.patch(args.id, {
+    const document = await ctx.db.patch(args.id, {
       isArchived: true,
     });
 
     recursiveArchive(args.id);
 
-    return space;
+    return document;
   },
 });
 
 export const getSidebar = query({
   args: {
-    parentSpace: v.optional(v.id("spaces")),
+    parentDocument: v.optional(v.id("documents")),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -64,23 +65,23 @@ export const getSidebar = query({
 
     const userId = identity.subject;
 
-    const spaces = await ctx.db
-      .query("spaces")
+    const documents = await ctx.db
+      .query("documents")
       .withIndex("by_user_parent", (q) =>
-        q.eq("userId", userId).eq("parentSpace", args.parentSpace),
+        q.eq("userId", userId).eq("parentDocument", args.parentDocument),
       )
       .filter((q) => q.eq(q.field("isArchived"), false))
       .order("desc")
       .collect();
 
-    return spaces;
+    return documents;
   },
 });
 
 export const create = mutation({
   args: {
     title: v.string(),
-    parentSpace: v.optional(v.id("spaces")),
+    parentDocument: v.optional(v.id("documents")),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -91,15 +92,15 @@ export const create = mutation({
 
     const userId = identity.subject;
 
-    const space = await ctx.db.insert("spaces", {
+    const document = await ctx.db.insert("documents", {
       title: args.title,
-      parentSpace: args.parentSpace,
+      parentDocument: args.parentDocument,
       userId,
       isArchived: false,
       isPublished: false,
     });
 
-    return space;
+    return document;
   },
 });
 
@@ -113,19 +114,19 @@ export const getTrash = query({
 
     const userId = identity.subject;
 
-    const spaces = await ctx.db
-      .query("spaces")
+    const documents = await ctx.db
+      .query("documents")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("isArchived"), true))
       .order("desc")
       .collect();
 
-    return spaces;
+    return documents;
   },
 });
 
 export const restore = mutation({
-  args: { id: v.id("spaces") },
+  args: { id: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
@@ -135,21 +136,21 @@ export const restore = mutation({
 
     const userId = identity.subject;
 
-    const existingSpace = await ctx.db.get(args.id);
+    const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingSpace) {
+    if (!existingDocument) {
       throw new Error("Not found");
     }
 
-    if (existingSpace.userId !== userId) {
+    if (existingDocument.userId !== userId) {
       throw new Error("Unauthorized");
     }
 
-    const recursiveRestore = async (spaceId: Id<"spaces">) => {
+    const recursiveRestore = async (documentId: Id<"documents">) => {
       const children = await ctx.db
-        .query("spaces")
+        .query("documents")
         .withIndex("by_user_parent", (q) =>
-          q.eq("userId", userId).eq("parentSpace", spaceId),
+          q.eq("userId", userId).eq("parentDocument", documentId),
         )
         .collect();
 
@@ -162,27 +163,27 @@ export const restore = mutation({
       }
     };
 
-    const options: Partial<Doc<"spaces">> = {
+    const options: Partial<Doc<"documents">> = {
       isArchived: false,
     };
 
-    if (existingSpace.parentSpace) {
-      const parent = await ctx.db.get(existingSpace.parentSpace);
+    if (existingDocument.parentDocument) {
+      const parent = await ctx.db.get(existingDocument.parentDocument);
       if (parent?.isArchived) {
-        options.parentSpace = undefined;
+        options.parentDocument = undefined;
       }
     }
 
-    const space = await ctx.db.patch(args.id, options);
+    const document = await ctx.db.patch(args.id, options);
 
     recursiveRestore(args.id);
 
-    return space;
+    return document;
   },
 });
 
 export const remove = mutation({
-  args: { id: v.id("spaces") },
+  args: { id: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
@@ -192,19 +193,19 @@ export const remove = mutation({
 
     const userId = identity.subject;
 
-    const existingSpace = await ctx.db.get(args.id);
+    const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingSpace) {
+    if (!existingDocument) {
       throw new Error("Not found");
     }
 
-    if (existingSpace.userId !== userId) {
+    if (existingDocument.userId !== userId) {
       throw new Error("Unauthorized");
     }
 
-    const space = await ctx.db.delete(args.id);
+    const document = await ctx.db.delete(args.id);
 
-    return space;
+    return document;
   },
 });
 
@@ -218,30 +219,30 @@ export const getSearch = query({
 
     const userId = identity.subject;
 
-    const spaces = await ctx.db
-      .query("spaces")
+    const documents = await ctx.db
+      .query("documents")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("isArchived"), false))
       .order("desc")
       .collect();
 
-    return spaces;
+    return documents;
   },
 });
 
 export const getById = query({
-  args: { spaceId: v.id("spaces") },
+  args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
-    const space = await ctx.db.get(args.spaceId);
+    const document = await ctx.db.get(args.documentId);
 
-    if (!space) {
+    if (!document) {
       throw new Error("Not found");
     }
 
-    if (space.isPublished && !space.isArchived) {
-      return space;
+    if (document.isPublished && !document.isArchived) {
+      return document;
     }
 
     if (!identity) {
@@ -250,17 +251,17 @@ export const getById = query({
 
     const userId = identity.subject;
 
-    if (space.userId !== userId) {
+    if (document.userId !== userId) {
       throw new Error("Unauthorized");
     }
 
-    return space;
+    return document;
   },
 });
 
 export const update = mutation({
   args: {
-    id: v.id("spaces"),
+    id: v.id("documents"),
     title: v.optional(v.string()),
     content: v.optional(v.string()),
     coverImage: v.optional(v.string()),
@@ -278,26 +279,26 @@ export const update = mutation({
 
     const { id, ...rest } = args;
 
-    const existingSpace = await ctx.db.get(args.id);
+    const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingSpace) {
+    if (!existingDocument) {
       throw new Error("Not found");
     }
 
-    if (existingSpace.userId !== userId) {
+    if (existingDocument.userId !== userId) {
       throw new Error("Unauthorized");
     }
 
-    const space = await ctx.db.patch(args.id, {
+    const document = await ctx.db.patch(args.id, {
       ...rest,
     });
 
-    return space;
+    return document;
   },
 });
 
 export const removeIcon = mutation({
-  args: { id: v.id("spaces") },
+  args: { id: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
@@ -307,26 +308,26 @@ export const removeIcon = mutation({
 
     const userId = identity.subject;
 
-    const existingSpace = await ctx.db.get(args.id);
+    const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingSpace) {
+    if (!existingDocument) {
       throw new Error("Not found");
     }
 
-    if (existingSpace.userId !== userId) {
+    if (existingDocument.userId !== userId) {
       throw new Error("Unauthorized");
     }
 
-    const space = await ctx.db.patch(args.id, {
+    const document = await ctx.db.patch(args.id, {
       icon: undefined,
     });
 
-    return space;
+    return document;
   },
 });
 
 export const removeCoverImage = mutation({
-  args: { id: v.id("spaces") },
+  args: { id: v.id("documents") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
@@ -336,20 +337,94 @@ export const removeCoverImage = mutation({
 
     const userId = identity.subject;
 
-    const existingSpace = await ctx.db.get(args.id);
+    const existingDocument = await ctx.db.get(args.id);
 
-    if (!existingSpace) {
+    if (!existingDocument) {
       throw new Error("Not found");
     }
 
-    if (existingSpace.userId !== userId) {
+    if (existingDocument.userId !== userId) {
       throw new Error("Unauthorized");
     }
 
-    const space = await ctx.db.patch(args.id, {
+    const document = await ctx.db.patch(args.id, {
       coverImage: undefined,
     });
 
-    return space;
+    return document;
+  },
+});
+
+export const get = query({
+  args: {
+    documentId: v.id("documents"),
+    search: v.optional(v.string()),
+    favorites: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Unauthorized");
+    }
+
+    if (args.favorites) {
+      const favoritedDocuments = await ctx.db
+        .query("userFavorites")
+        .withIndex("by_user_document", (q) =>
+          q.eq("userId", identity.subject).eq("documentId", args.documentId),
+        )
+        .order("desc")
+        .collect();
+
+      const ids = favoritedDocuments.map((b) => b.documentId);
+
+      const documents = await getAllOrThrow(ctx.db, ids);
+
+      return documents.map((document) => ({
+        ...document,
+        isFavorite: true,
+      }));
+    }
+
+    const title = args.search as string;
+    let documents = [];
+
+    if (title) {
+      documents = await ctx.db
+        .query("documents")
+        .withSearchIndex("search_title", (q) =>
+          q.search("title", title).eq("userId", identity.subject),
+        )
+        .collect();
+    } else {
+      documents = await ctx.db
+        .query("documents")
+        .withSearchIndex("search_content", (q) =>
+          q.search("content", title).eq("userId", identity.subject),
+        )
+        .collect();
+    }
+
+    const documentsWithFavoriteRelation = documents.map((document) => {
+      return ctx.db
+        .query("userFavorites")
+        .withIndex("by_user_document", (q) =>
+          q.eq("userId", identity.subject).eq("documentId", document._id),
+        )
+        .unique()
+        .then((favorite) => {
+          return {
+            ...document,
+            isFavorite: !!favorite,
+          };
+        });
+    });
+
+    const documentsWithFavoriteBoolean = Promise.all(
+      documentsWithFavoriteRelation,
+    );
+
+    return documentsWithFavoriteBoolean;
   },
 });
