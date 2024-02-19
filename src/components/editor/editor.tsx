@@ -1,7 +1,6 @@
 "use client";
 import {
   defaultEditorProps,
-  Editor,
   EditorRoot,
   EditorBubble,
   EditorCommand,
@@ -9,6 +8,7 @@ import {
   EditorCommandEmpty,
   EditorContent,
   type JSONContent,
+  Editor,
 } from "novel";
 import { ImageResizer } from "novel/extensions";
 import { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ interface EditorProps {
   editable?: boolean;
 }
 
-const Editor = ({
+const NovelEditor = ({
   onChange,
   initialContent: contentFromConvex,
   editable,
@@ -134,4 +134,4 @@ const Editor = ({
   );
 };
 
-export default Editor;
+export default NovelEditor;
