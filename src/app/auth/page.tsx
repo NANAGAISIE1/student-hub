@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { Icons } from "@/components/icons";
 import { Typewriter } from "@/components/ui/typewritter-effect";
 
-import Form from "./_components/auth-form";
+import Form, { usePrompt } from "./_components/auth-form";
+import AuthFormSkeleton from "./_components/skeleton";
 
 export default function AuthenticationPage() {
   return (
@@ -22,7 +24,9 @@ export default function AuthenticationPage() {
         </div>
       </div>
       <div className="relative mx-auto flex h-full w-full flex-col items-center  justify-center space-y-6 lg:p-8">
-        <Form />
+        <Suspense key={usePrompt()} fallback={<AuthFormSkeleton />}>
+          <Form />
+        </Suspense>
         <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
           <Link
             href="/terms"

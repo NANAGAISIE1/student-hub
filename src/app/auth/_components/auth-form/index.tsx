@@ -1,8 +1,6 @@
 "use client";
-
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
@@ -10,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { AuthCopy } from "./auth-copy";
 import { AuthTypeLink } from "./auth-type-link";
 import { Auth } from "../auth-type";
-import AuthFormSkeleton from "../skeleton";
 
 enum AuthTypes {
   LOGIN = "login",
@@ -23,7 +20,8 @@ export const usePrompt = () => {
   return prompt;
 };
 
-const AuthForm = ({ prompt }: { prompt: string | null }) => {
+const AuthForm = () => {
+  const prompt = usePrompt();
   return (
     <>
       <div className="flex flex-col items-center justify-center space-y-2 text-center">
@@ -52,13 +50,4 @@ const AuthForm = ({ prompt }: { prompt: string | null }) => {
   );
 };
 
-const Form = () => {
-  const prompt = usePrompt();
-  return (
-    <Suspense key={prompt} fallback={<AuthFormSkeleton />}>
-      <AuthForm prompt={prompt} />
-    </Suspense>
-  );
-};
-
-export default Form;
+export default AuthForm;
