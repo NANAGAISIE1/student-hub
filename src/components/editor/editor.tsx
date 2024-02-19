@@ -95,7 +95,7 @@ const NovelEditor = ({
             {suggestionItems.map((item) => (
               <EditorCommandItem
                 value={item.title}
-                onCommand={(val) => item.command(val)}
+                onCommand={(val) => item.command && item.command(val)}
                 className={`flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-accent aria-selected:bg-accent `}
                 key={item.title}
               >
@@ -126,7 +126,12 @@ const NovelEditor = ({
             <Separator orientation="vertical" />
             {/* <TextButtons /> */}
             <Separator orientation="vertical" />
-            <ColorSelector open={openColor} onOpenChange={setOpenColor} />
+            <ColorSelector
+              open={openColor}
+              onOpenChange={setOpenColor}
+              isOpen={openColor}
+              setIsOpen={setOpenColor}
+            />
           </EditorBubble>
         </EditorContent>
       </EditorRoot>
