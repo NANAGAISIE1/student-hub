@@ -1,14 +1,14 @@
 "use client";
 
 import { useConvexAuth } from "convex/react";
-import { redirect } from "next/navigation";
 
 import { Spinner } from "@/components/ui/spinner";
 
-import Sidebar from "./(routes)/spaces/_components/sidebar";
+import NavBar from "./_components/navbar";
+import Sidebar from "./_components/sidebar";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useConvexAuth();
+  const { isLoading } = useConvexAuth();
 
   if (isLoading) {
     return (
@@ -18,20 +18,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!isAuthenticated) {
-    return redirect("/auth?prompt=login");
-  }
-
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-
-      <main className="container h-full flex-1 overflow-y-auto">
-        {/* <SearchCommand /> */}
-
-        {children}
-      </main>
-    </div>
+    <main className="container flex h-screen w-full flex-col">
+      <div className="sticky inset-x-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b border-border/40 bg-background/95 backdrop-blur transition-all supports-[backdrop-filter]:bg-background/60">
+        <Sidebar />
+        <NavBar />
+      </div>
+      <section className="flex w-full flex-col gap-5 p-10">{children}</section>
+    </main>
   );
 };
 

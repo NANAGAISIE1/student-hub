@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -15,10 +14,14 @@ enum AuthTypes {
   REGISTER = "register",
 }
 
-const AuthForm = () => {
+export const usePrompt = () => {
   const searchParams = useSearchParams();
   const prompt = searchParams.get("prompt");
+  return prompt;
+};
 
+const AuthForm = () => {
+  const prompt = usePrompt();
   return (
     <>
       <div className="flex flex-col items-center justify-center space-y-2 text-center">

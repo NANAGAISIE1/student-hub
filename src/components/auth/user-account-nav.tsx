@@ -1,15 +1,10 @@
 "use client";
-
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import { CaretSortIcon } from "@radix-ui/react-icons";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
-
 import UserAvatar from "./user-avatar";
-import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,20 +21,13 @@ const UserAccountNav = () => {
   if (isAuthenticated && user) {
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger className={"h-8 w-8 hover:cursor-pointer"} asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-label="User Profile"
-            className={cn("w-[200px] justify-between py-2")}
-          >
-            <UserAvatar
-              imageUrl={user?.picture as string}
-              name={user?.given_name as string}
-            />
-            {user.given_name}
-            <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
-          </Button>
+        <DropdownMenuTrigger
+          className={"h-8 w-8 rounded-full hover:cursor-pointer"}
+        >
+          <UserAvatar
+            imageUrl={user?.picture as string}
+            name={user?.given_name as string}
+          />
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
@@ -53,7 +41,7 @@ const UserAccountNav = () => {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem asChild>
-            <Link href="/spaces">Dashboard</Link>
+            <Link href="/dashboard">Dashboard</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
 
