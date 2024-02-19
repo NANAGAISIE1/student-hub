@@ -4,10 +4,11 @@ import { Suspense } from "react";
 import { Icons } from "@/components/icons";
 import { Typewriter } from "@/components/ui/typewritter-effect";
 
-import Form, { usePrompt } from "./_components/auth-form";
+import Form from "./_components/auth-form";
 import AuthFormSkeleton from "./_components/skeleton";
 
 export default function AuthenticationPage() {
+  const dynamicKey = Date.now();
   return (
     <main className="container relative grid h-screen grid-cols-1 flex-col items-center justify-center md:grid-cols-2 lg:max-w-none lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-accent-foreground dark:border-r md:flex">
@@ -24,7 +25,7 @@ export default function AuthenticationPage() {
         </div>
       </div>
       <div className="relative mx-auto flex h-full w-full flex-col items-center  justify-center space-y-6 lg:p-8">
-        <Suspense key={usePrompt()} fallback={<AuthFormSkeleton />}>
+        <Suspense key={dynamicKey} fallback={<AuthFormSkeleton />}>
           <Form />
         </Suspense>
         <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center">
