@@ -66,7 +66,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
     <div
       className="w-full"
       onBlur={() => {
-        editor.chain().unsetHighlight().run();
+        editor?.chain().unsetHighlight().run();
       }}
     >
       <Command>
@@ -78,7 +78,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
 
         <CommandInput
           onFocus={() => {
-            editor.chain().setHighlight({ color: "#c1ecf970" }).run();
+            editor?.chain().setHighlight({ color: "#c1ecf970" }).run();
           }}
           value={extraPrompt}
           onValueChange={setExtraPrompt}
@@ -93,7 +93,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
               key={option.value}
               value={option.value}
               onSelect={(option) => {
-                if (option === "continue") {
+                if (option === "continue" && editor) {
                   getPrevText(editor, {
                     chars: 5000,
                   });
