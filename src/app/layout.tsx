@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Nunito_Sans } from "next/font/google";
 
-import "./globals.css";
+import "./styles/globals.css";
 import ConvexProviderWithKinde from "@/components/providers/convex-with-auth";
 import Kinde from "@/components/providers/kinde";
 import { ModalProvider } from "@/components/providers/modal";

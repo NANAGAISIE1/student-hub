@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -60,7 +61,7 @@ export const SearchCommand = () => {
   }
 
   return (
-    <>
+    <Command>
       <Button
         onClick={toggle}
         size={isSidebarOpen ? "default" : "icon"}
@@ -113,6 +114,6 @@ export const SearchCommand = () => {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
-    </>
+    </Command>
   );
 };
