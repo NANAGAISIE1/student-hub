@@ -17,6 +17,12 @@ enum AuthTypes {
   REGISTER = "register",
 }
 
+export const usePrompt = () => {
+  const searchParams = useSearchParams();
+  const prompt = searchParams.get("prompt");
+  return prompt;
+};
+
 const AuthForm = ({ prompt }: { prompt: string | null }) => {
   return (
     <>
@@ -47,8 +53,7 @@ const AuthForm = ({ prompt }: { prompt: string | null }) => {
 };
 
 const Form = () => {
-  const searchParams = useSearchParams();
-  const prompt = searchParams.get("prompt");
+  const prompt = usePrompt();
   return (
     <Suspense key={prompt} fallback={<AuthFormSkeleton />}>
       <AuthForm prompt={prompt} />
