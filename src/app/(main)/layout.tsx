@@ -4,6 +4,7 @@ import { useConvexAuth } from "convex/react";
 
 import { Spinner } from "@/components/ui/spinner";
 
+import NavBar from "./_components/navbar";
 import Sidebar from "./_components/sidebar";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
@@ -18,11 +19,12 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <main className="relative flex h-screen w-full flex-row">
-      <Sidebar />
-      <section className="ml-20 flex w-full flex-col gap-5 p-10">
-        {children}
-      </section>
+    <main className="container flex h-screen w-full flex-col">
+      <div className="sticky inset-x-0 top-0 z-50 flex h-14 w-full items-center justify-between border-b border-border/40 bg-background/95 backdrop-blur transition-all supports-[backdrop-filter]:bg-background/60">
+        <Sidebar />
+        <NavBar />
+      </div>
+      <section className="flex w-full flex-col gap-5 p-10">{children}</section>
     </main>
   );
 };

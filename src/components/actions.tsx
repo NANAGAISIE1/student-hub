@@ -4,7 +4,6 @@ import { DropdownMenuContentProps } from "@radix-ui/react-dropdown-menu";
 import { Link2, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-// import { ConfirmModal } from "@/components/confirm-modal";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,7 +33,7 @@ export const Actions = ({
   title,
 }: ActionsProps) => {
   const { onOpen } = useRenameModal();
-  const { mutate, pending } = useApiMutation(api.documents.remove);
+  const { mutate, pending } = useApiMutation(api.document.remove);
 
   const onCopyLink = () => {
     navigator.clipboard

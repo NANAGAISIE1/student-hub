@@ -1,3 +1,4 @@
+import { decode } from "blurhash";
 import { type ClassValue, clsx } from "clsx";
 import qs from "query-string";
 import { twMerge } from "tailwind-merge";
@@ -113,6 +114,55 @@ export const handleError = (error: unknown) => {
 
 export const capitalizeFirstLetter = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+export const convertBlurHashToDataUrl = (
+  hash: string,
+  width: number,
+  height: number,
+): string | null => {
+  // Validate input parameters
+  if (!hash || width <= 0 || height <= 0) {
+    console.error("Invalid input parameters");
+    return null;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  // Check if canvas and context were successfully created
+  if (!ctx) {
+    console.error("Failed to create canvas context");
+    return null;
+  }
+
+  // Create imageData
+  const imageData = ctx.createImageData(width, height);
+
+  // Decode the BlurHash
+  const pixels = decode(hash, width, height);
+
+  // Check if decoding was successful
+  if (!pixels) {
+    console.error("Failed to decode BlurHash");
+    return null;
+  }
+
+  // Set pixel data
+  imageData.data.set(pixels);
+
+  // Render image
+  try {
+    ctx.putImageData(imageData, 0, 0);
+  } catch (error) {
+    console.error("Error rendering image:", error);
+    return null;
+  }
+
+  // Return data URL
+  return canvas.toDataURL();
 };
 
 // export const formatPathnameToCrumbs = (pathname: string): CrumbItem[] => {

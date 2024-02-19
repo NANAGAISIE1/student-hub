@@ -1,27 +1,22 @@
 "use client";
-import { useQuery } from "convex/react";
-
 import { DocumentCard } from "./document-card";
-import { api } from "../../../../convex/_generated/api";
+import EmptyDashboard from "./empty-dashboard";
+import { NewDocumentButton } from "./new-document-button";
+import { Doc } from "../../../../convex/_generated/dataModel";
 
 interface DocumentListProps {
-  query: {
-    search?: string;
-    favorites?: string;
-  };
+  data: Doc<"documents">[] | undefined;
 }
 
-export const DocumentList = ({ query }: DocumentListProps) => {
-  const data = useQuery(api.documents.getSearch);
-
+export const DocumentList = ({ data }: DocumentListProps) => {
   if (data === undefined) {
     return (
       <div>
-        <h2 className="text-3xl">
+        {/* <h2 className="text-3xl">
           {query.favorites ? "Favorite boards" : "Team boards"}
-        </h2>
-        <div className="mt-8 grid grid-cols-1 gap-5 pb-10 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-          {/* <NewBoardButton documentId={documentId} disabled /> */}
+        </h2> */}
+        <div className="mt-8 grid grid-cols-1 gap-5 pb-10 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-4">
+          <NewDocumentButton />
           <DocumentCard.Skeleton />
           <DocumentCard.Skeleton />
           <DocumentCard.Skeleton />
@@ -31,35 +26,33 @@ export const DocumentList = ({ query }: DocumentListProps) => {
     );
   }
 
-  if (!data?.length && query.search) {
-    // return <EmptySearch />;
-  }
+  // if (!data?.length && query.search) {
+  //   // return <EmptySearch />;
+  // }
 
-  if (!data?.length && query.favorites) {
-    // return <EmptyFavorites />;
-  }
+  // if (!data?.length && query.favorites) {
+  //   // return <EmptyFavorites />;
+  // }
 
   if (!data?.length) {
-    // return <EmptyBoards />;
+    return <EmptyDashboard />;
   }
 
   return (
     <div>
-      <h2 className="text-3xl">
+      {/* <h2 className="text-3xl">
         {query.favorites ? "Favorite boards" : "Team boards"}
-      </h2>
-      <div className="mt-8 grid grid-cols-1 gap-5 pb-10 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        {/* <NewBoardButton documentId={documentId} /> */}
+      </h2> */}
+      <div className="mt-8 grid grid-cols-1 gap-5 pb-10 sm:grid-cols-2 md:grid-cols-3 ">
+        <NewDocumentButton />
         {data?.map((document) => (
           <DocumentCard
             key={document._id}
             id={document._id}
             title={document.title}
-            // imageUrl={document.imageUrl}
-            // authorId={document.authorId}
-            // authorName={document.authorName}
+            imageUrl={document.coverImage}
+            blurHash={document.coverImageBlurHash}
             createdAt={document._creationTime}
-            // isFavorite={document.isFavorite}
           />
         ))}
       </div>

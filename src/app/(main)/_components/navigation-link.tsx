@@ -25,14 +25,11 @@ const NavigationLink = ({ children, name, href }: Props) => {
           size: size as "default" | "icon" | "sm" | "lg" | null | undefined,
           className: cn(
             "flex w-full place-items-center gap-3 overflow-x-clip transition-colors duration-100",
-            isOpen && "[justify-content:flex-start]",
           ),
         })}
       >
         {children}
-        {isOpen && (
-          <p className="!m-0 whitespace-nowrap tracking-wide">{name}</p>
-        )}
+        <p className="!m-0 whitespace-nowrap tracking-wide">{name}</p>
       </Link>
     </Hint>
   );

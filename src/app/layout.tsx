@@ -4,6 +4,7 @@ import { Montserrat, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import ConvexProviderWithKinde from "@/components/providers/convex-with-auth";
 import Kinde from "@/components/providers/kinde";
+import { ModalProvider } from "@/components/providers/modal";
 import { ThemeProvider } from "@/components/providers/theme";
 import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/config/siteConfig";
@@ -139,6 +140,7 @@ export default function RootLayout({
               <ConvexProviderWithKinde>
                 <Toaster />
                 {children}
+                <ModalProvider />
               </ConvexProviderWithKinde>
             </EdgeStoreProvider>
           </Kinde>

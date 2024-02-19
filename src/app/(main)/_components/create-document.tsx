@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { getPhotoFromUnsplash } from "@/lib/unsplash";
 
 import { api } from "../../../../convex/_generated/api";
 
@@ -38,7 +39,7 @@ const formSchema = z.object({
 const CreateDocument = (props: Props) => {
   const router = useRouter();
   const { user } = useKindeBrowserClient();
-  const create = useMutation(api.documents.create);
+  const create = useMutation(api.document.create);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,9 +49,19 @@ const CreateDocument = (props: Props) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const promise = create({ title: values.title }).then(
-      (documentId) => console.log(documentId),
-      //   router.push(`/documents/${documentId}`),
+    // const coverImage = await getPhotoFromUnsplash({ query: values.title });
+
+    const promise = getPhotoFromUnsplash({ query: values.title }).then(
+      ({ photoUrl, blurHash }) => {
+        create({
+          title: values.title,
+          coverImage: photoUrl,
+          blurHash: blurHash as string,
+        })
+          .then
+          //   //   router.push(`/documents/${documentId}`),
+          ();
+      },
     );
 
     toast.promise(promise, {
@@ -58,7 +69,6 @@ const CreateDocument = (props: Props) => {
       success: "New note created!",
       error: "Failed to create a new note.",
     });
-    console.log(values);
   }
 
   return (

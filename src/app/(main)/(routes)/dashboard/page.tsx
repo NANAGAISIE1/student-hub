@@ -1,19 +1,15 @@
 "use client";
+import { useQuery } from "convex/react";
+
+import { api } from "../../../../../convex/_generated/api";
 import { DocumentList } from "../../_components/document-list";
+import EmptyDashboard from "../../_components/empty-dashboard";
 
-interface DashboardPageProps {
-  searchParams: {
-    search?: string;
-    favorites?: string;
-  };
-}
-
-const DashboardPage = ({ searchParams }: DashboardPageProps) => {
+const DashboardPage = () => {
+  const data = useQuery(api.documents.getAll, {});
   return (
     <section>
-      {/* <EmptyDashboard /> */}
-      <DocumentList query={searchParams} />
-      {/* {!documents ? <EmptyDashboard /> : <DocumentList query={searchParams} />} */}
+      {!data ? <EmptyDashboard /> : <DocumentList data={data} />}
     </section>
   );
 };

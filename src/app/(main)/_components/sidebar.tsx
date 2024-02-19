@@ -1,19 +1,19 @@
 "use client";
 import { useAnimationControls } from "framer-motion";
-import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  ArrowRight,
   Calendar,
   LayoutDashboard,
+  MoreHorizontal,
   Settings,
 } from "lucide-react";
 import { useEffect } from "react";
 
 import { SearchCommand } from "@/components/search-command";
 import { Button } from "@/components/ui/button";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSidebar } from "@/hooks/store/side-bar";
-import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 import NavigationLink from "./navigation-link";
 
@@ -39,6 +39,7 @@ const containerVariants = {
 const Sidebar = () => {
   const isOpen = useSidebar((state) => state.isOpen);
   const setIsOpen = useSidebar((state) => state.setIsOpen);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const containerControls = useAnimationControls();
   const svgControls = useAnimationControls();
@@ -57,33 +58,63 @@ const Sidebar = () => {
     setIsOpen();
   };
 
+  if (isDesktop)
+    return (
+      <>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button variant={"ghost"} size={"icon"}>
+              <MoreHorizontal className={"w-8 min-w-8"} />
+            </Button>
+          </SheetTrigger>
+          <SheetContent
+            side={"left"}
+            className="flex flex-col justify-evenly pt-12"
+          >
+            <div className="flex flex-col gap-3">
+              <SearchCommand />
+              <NavigationLink name="Setting" href="/settings">
+                <Settings className="w-8 min-w-8" />
+              </NavigationLink>
+            </div>
+            <div className="flex flex-col gap-3">
+              <NavigationLink name="Dashboard" href="/dashboard">
+                <LayoutDashboard className="w-8 min-w-8" />
+              </NavigationLink>
+              <NavigationLink name="Timetable" href="/timetable">
+                <Calendar className="w-8 min-w-8" />
+              </NavigationLink>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </>
+    );
+
   return (
-    <motion.nav
-      variants={containerVariants}
-      animate={containerControls}
-      initial="close"
-      className="fixed left-0 top-0 z-10 flex h-full flex-col gap-20 bg-neutral-900 p-5 shadow shadow-neutral-600"
-    >
-      <div className={cn("flex w-full place-items-center justify-end")}>
-        <Button onClick={() => handleOpenClose()} size={"icon"}>
-          {isOpen ? <ArrowLeft /> : <ArrowRight />}
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button variant={"ghost"} size={"icon"}>
+          <MoreHorizontal className={"w-8 min-w-8"} />
         </Button>
-      </div>
-      <div className="flex flex-col gap-3">
-        <SearchCommand />
-        <NavigationLink name="Setting" href="/settings">
-          <Settings className="w-8 min-w-8" />
-        </NavigationLink>
-      </div>
-      <div className="flex flex-col gap-3">
-        <NavigationLink name="Dashboard" href="/dashboard">
-          <LayoutDashboard className="w-8 min-w-8" />
-        </NavigationLink>
-        <NavigationLink name="Timetable" href="/timetable">
-          <Calendar className="w-8 min-w-8" />
-        </NavigationLink>
-      </div>
-    </motion.nav>
+      </DrawerTrigger>
+
+      <DrawerContent className="flex min-h-[50vh] w-full flex-col items-center justify-between pb-10">
+        <div className="flex w-full flex-col gap-3">
+          <SearchCommand />
+          <NavigationLink name="Setting" href="/settings">
+            <Settings className="w-8 min-w-8" />
+          </NavigationLink>
+        </div>
+        <div className="flex w-full flex-col gap-3">
+          <NavigationLink name="Dashboard" href="/dashboard">
+            <LayoutDashboard className="w-8 min-w-8" />
+          </NavigationLink>
+          <NavigationLink name="Timetable" href="/timetable">
+            <Calendar className="w-8 min-w-8" />
+          </NavigationLink>
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

@@ -23,7 +23,10 @@ import { api } from "../../convex/_generated/api";
 export const SearchCommand = () => {
   const { user } = useKindeBrowserClient();
   const router = useRouter();
-  const documents = useQuery(api.documents.getSearch);
+  const [searchParam, setSearchParam] = useState("");
+  const documents = useQuery(api.documents.getAll, {
+    searchParam: searchParam,
+  });
   const [isMounted, setIsMounted] = useState(false);
 
   const toggle = useSearch((store) => store.toggle);
@@ -62,44 +65,51 @@ export const SearchCommand = () => {
         onClick={toggle}
         size={isSidebarOpen ? "default" : "icon"}
         variant={"ghost"}
+        className="w-full"
       >
-        {isSidebarOpen ? (
+        <Hint label="Search... ⌘K" side="right" align="center" sideOffset={10}>
           <div className="flex w-full items-center justify-between overflow-x-clip">
+            <Search className="w-8 min-w-8" />
             <p className="!m-0">Search space...</p>
             <kbd>⌘K</kbd>
           </div>
-        ) : (
-          <Hint
-            label="Search... ⌘K"
-            side="right"
-            align="center"
-            sideOffset={10}
-          >
-            <Search className="w-8 min-w-8" />
-          </Hint>
-        )}
+        </Hint>
       </Button>
 
       <CommandDialog open={isOpen} onOpenChange={onClose}>
-        <CommandInput placeholder={`Search ${user?.given_name}'s Jotion...`} />
+        <CommandInput
+          placeholder={`Search ${user?.given_name}'s Jotion...`}
+          onValueChange={(value) => setSearchParam(value)}
+        />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Documents">
-            {documents?.map((document) => (
-              <CommandItem
-                key={document._id}
-                value={`${document._id}-${document.title}`}
-                title={document.title}
-                onSelect={() => onSelect(document._id)}
-              >
-                {document.icon ? (
-                  <p className="mr-2 text-[18px]">{document.icon}</p>
-                ) : (
-                  <File className="mr-2 h-4 w-4" />
-                )}
-                <span>{document.title}</span>
-              </CommandItem>
-            ))}
+            {documents
+              ?.sort((a, b) => {
+                // Convert names to lowercase for case-insensitive sorting
+                const nameA = a.title.toLowerCase();
+                const nameB = b.title.toLowerCase();
+
+                // Compare the names
+                if (nameA < nameB) return -1;
+                if (nameA > nameB) return 1;
+                return 0;
+              })
+              .map((document) => (
+                <CommandItem
+                  key={document._id}
+                  value={`${document.title}`}
+                  title={document.title}
+                  onSelect={() => onSelect(document._id)}
+                >
+                  {document.icon ? (
+                    <p className="mr-2 text-[18px]">{document.icon}</p>
+                  ) : (
+                    <File className="mr-2 h-4 w-4" />
+                  )}
+                  <span>{document.title}</span>
+                </CommandItem>
+              ))}
           </CommandGroup>
         </CommandList>
       </CommandDialog>

@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-interface ConfirmModalProps {
+export interface IConfirmModal {
   children: React.ReactNode;
   onConfirm: () => void;
   disabled?: boolean;
@@ -26,7 +26,7 @@ export const ConfirmModal = ({
   disabled,
   header,
   description,
-}: ConfirmModalProps) => {
+}: IConfirmModal) => {
   const handleConfirm = () => {
     onConfirm();
   };
