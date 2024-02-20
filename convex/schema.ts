@@ -24,6 +24,24 @@ export default defineSchema({
       filterFields: ["userId", "isArchived", "isPublished"],
     }),
 
+  unsplashImages: defineTable({
+    photoData: v.object({
+      title: v.string(),
+      description: v.string(),
+      blurHash: v.string(),
+      url: v.string(),
+    }),
+  })
+    .index("by_url", ["photoData.url"])
+    .searchIndex("search_description", {
+      searchField: "photoData.description",
+      filterFields: ["photoData.url", "photoData.blurHash"],
+    })
+    .searchIndex("search_title", {
+      searchField: "photoData.title",
+      filterFields: ["photoData.url", "photoData.blurHash"],
+    }),
+
   userFavorites: defineTable({
     userId: v.string(),
     documentId: v.id("documents"),

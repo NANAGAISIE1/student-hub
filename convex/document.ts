@@ -1,6 +1,8 @@
 import { v } from "convex/values";
 import { getAllOrThrow } from "convex-helpers/server/relationships.js";
 
+import { findMostSimilarItem } from "@/lib/image-similarity";
+
 import { Doc, Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 
@@ -31,6 +33,93 @@ export const create = mutation({
     });
 
     return document;
+  },
+});
+
+export const saveImage = mutation({
+  args: {
+    photoData: v.object({
+      title: v.string(),
+      description: v.string(),
+      blurHash: v.string(),
+      url: v.string(),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const storedImageData = await ctx.db.insert("unsplashImages", {
+      photoData: {
+        title: args.photoData.title,
+        url: args.photoData.url,
+        description: args.photoData.description,
+        blurHash: args.photoData.blurHash,
+      },
+    });
+
+    return storedImageData;
+  },
+});
+
+export const getUnsplashImage = query({
+  args: { query: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const imageWithSimilarTitle = await ctx.db
+      .query("unsplashImages")
+      .withSearchIndex("search_title", (q) =>
+        q.search("photoData.title", args.query as string),
+      )
+      .collect();
+
+    const imageWithSimilarDescription = await ctx.db
+      .query("unsplashImages")
+      .withSearchIndex("search_description", (q) =>
+        q.search("photoData.description", args.query as string),
+      )
+      .collect();
+
+    const combinedImageArray = [
+      ...imageWithSimilarTitle,
+      ...imageWithSimilarDescription,
+    ];
+
+    // Create a Set to filter out duplicate objects based on some unique identifier
+    const uniqueImageObjects = new Set();
+
+    // Filter the combined array to remove duplicate objects
+    const filteredImageArray = combinedImageArray.filter((item) => {
+      // Convert the object to a string to check for uniqueness
+      const objectString = JSON.stringify(item);
+
+      // If the objectString is not in the Set, add it and return true (keep the item)
+      if (!uniqueImageObjects.has(objectString)) {
+        uniqueImageObjects.add(objectString);
+        return true;
+      }
+
+      // If the objectString is already in the Set, return false (discard the item)
+      return false;
+    });
+
+    // Convert the filtered array back to an array of objects
+    const returnedImageArray = filteredImageArray.map((item) => item);
+
+    const mostSimilarFromArgs = findMostSimilarItem(
+      returnedImageArray,
+      args.query as string,
+    );
+
+    return mostSimilarFromArgs as Doc<"unsplashImages">;
   },
 });
 

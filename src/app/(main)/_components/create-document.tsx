@@ -1,7 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { useMutation } from "convex/react";
+import { useAction, useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -24,7 +24,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getPhotoFromUnsplash } from "@/lib/unsplash";
 
 import { api } from "../../../../convex/_generated/api";
 
@@ -39,6 +38,7 @@ const formSchema = z.object({
 const CreateDocument = (props: Props) => {
   const router = useRouter();
   const { user } = useKindeBrowserClient();
+  const getImage = useAction(api.images.coverImage);
   const create = useMutation(api.document.create);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,21 +48,16 @@ const CreateDocument = (props: Props) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // const coverImage = await getPhotoFromUnsplash({ query: values.title });
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const coverImage = await getImage({ query: values.title });
+    const photoUrl = coverImage?.photoUrl;
+    const blurHash = coverImage?.blurHash;
 
-    const promise = getPhotoFromUnsplash({ query: values.title }).then(
-      ({ photoUrl, blurHash }) => {
-        create({
-          title: values.title,
-          coverImage: photoUrl,
-          blurHash: blurHash as string,
-        })
-          .then
-          //   //   router.push(`/documents/${documentId}`),
-          ();
-      },
-    );
+    const promise = create({
+      title: values.title,
+      coverImage: photoUrl,
+      blurHash: blurHash as string,
+    }).then((document) => router.push(`/dashboard/${document}`));
 
     toast.promise(promise, {
       loading: "Creating a new note...",

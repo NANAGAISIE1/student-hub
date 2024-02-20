@@ -14,14 +14,14 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { useSidebar } from "@/hooks/store/side-bar";
 import { useSearch } from "@/hooks/store/use-search-dialog";
 
 import { Hint } from "./hint";
 import { Button } from "./ui/button";
 import { api } from "../../convex/_generated/api";
 
-export const SearchCommand = () => {
+export const SearchCommand = ({ isCollapsed }: { isCollapsed: boolean }) => {
+  const collapsed = isCollapsed || true;
   const { user } = useKindeBrowserClient();
   const router = useRouter();
   const [searchParam, setSearchParam] = useState("");
@@ -33,7 +33,6 @@ export const SearchCommand = () => {
   const toggle = useSearch((store) => store.toggle);
   const isOpen = useSearch((store) => store.isOpen);
   const onClose = useSearch((store) => store.onClose);
-  const isSidebarOpen = useSidebar((store) => store.isOpen);
 
   useEffect(() => {
     setIsMounted(true);
@@ -62,20 +61,32 @@ export const SearchCommand = () => {
 
   return (
     <Command>
-      <Button
-        onClick={toggle}
-        size={isSidebarOpen ? "default" : "icon"}
-        variant={"ghost"}
-        className="w-full"
-      >
+      {isCollapsed ? (
         <Hint label="Search... ⌘K" side="right" align="center" sideOffset={10}>
-          <div className="flex w-full items-center justify-between overflow-x-clip">
-            <Search className="w-8 min-w-8" />
-            <p className="!m-0">Search space...</p>
-            <kbd>⌘K</kbd>
-          </div>
+          <Button
+            onClick={toggle}
+            variant={"ghost"}
+            size={"icon"}
+            className="h-9 w-9"
+          >
+            <Search className="h-4 w-4" />
+            <span className="sr-only">Search</span>
+          </Button>
         </Hint>
-      </Button>
+      ) : (
+        <Hint label="Search... ⌘K" side="right" align="center" sideOffset={10}>
+          <Button onClick={toggle} variant={"ghost"} className="w-full">
+            <div className="flex w-full items-center justify-between overflow-x-clip">
+              <div className="flex items-center">
+                <Search className="h-4 w-4" />
+                <p className="!mt-0 ml-2">Search space...</p>
+              </div>
+              <kbd>⌘K</kbd>
+            </div>
+            <span className="sr-only">Search</span>
+          </Button>
+        </Hint>
+      )}
 
       <CommandDialog open={isOpen} onOpenChange={onClose}>
         <CommandInput

@@ -54,10 +54,8 @@ export const DocumentCard = ({
     } else {
       onFavorite({ id }).catch(() => toast.error("Failed to favorite"));
     }
-    console.log("Favorite toggled");
   };
   const blurDataUrl = convertBlurHashToDataUrl(blurHash as string, 127, 100);
-  console.log("blurDataUrl", blurDataUrl);
 
   return (
     <Link href={`/dashboard/${id}`}>
@@ -68,6 +66,7 @@ export const DocumentCard = ({
             placeholder="blur"
             blurDataURL={blurDataUrl as string}
             alt={title}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             fill
             className="object-fit aspect-[127/100] object-fill"
             quality={100}

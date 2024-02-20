@@ -72,7 +72,7 @@ const Sidebar = () => {
             className="flex flex-col justify-evenly pt-12"
           >
             <div className="flex flex-col gap-3">
-              <SearchCommand />
+              <SearchCommand isCollapsed />
               <NavigationLink name="Setting" href="/settings">
                 <Settings className="w-8 min-w-8" />
               </NavigationLink>
@@ -100,7 +100,7 @@ const Sidebar = () => {
 
       <DrawerContent className="flex min-h-[50vh] w-full flex-col items-center justify-between pb-10">
         <div className="flex w-full flex-col gap-3">
-          <SearchCommand />
+          {/* <SearchCommand /> */}
           <NavigationLink name="Setting" href="/settings">
             <Settings className="w-8 min-w-8" />
           </NavigationLink>

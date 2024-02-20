@@ -35,7 +35,7 @@ const ButtonLink = () => {
           Dashboard
         </Link>
 
-        <UserAccountNav />
+        <UserAccountNav isCollapsed />
       </>
     );
   }

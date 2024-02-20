@@ -4,6 +4,8 @@ import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
+import { cn } from "@/lib/utils";
+
 import UserAvatar from "./user-avatar";
 import {
   DropdownMenu,
@@ -13,7 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-const UserAccountNav = () => {
+const UserAccountNav = ({ isCollapsed }: { isCollapsed?: boolean }) => {
+  const collapsed = isCollapsed || true;
   const { user, isLoading, isAuthenticated } = useKindeBrowserClient();
 
   if (isLoading) return <Loader2 className="animate h-8 w-8 animate-spin" />;
@@ -22,12 +25,22 @@ const UserAccountNav = () => {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger
-          className={"h-8 w-8 rounded-full hover:cursor-pointer"}
+          className={cn(
+            "z-50 flex items-center gap-2 [&>span]:line-clamp-1 [&>span]:flex [&>span]:w-full [&>span]:items-center [&>span]:gap-1 [&>span]:truncate [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0",
+            isCollapsed &&
+              "h-8 w-8 shrink-0 items-center justify-center rounded-full  p-0 hover:cursor-pointer [&>svg]:hidden",
+          )}
+          aria-label="Select account"
         >
-          <UserAvatar
-            imageUrl={user?.picture as string}
-            name={user?.given_name as string}
-          />
+          <div data-collapsed={isCollapsed} className="flex items-center">
+            <UserAvatar
+              imageUrl={user?.picture as string}
+              name={user?.given_name as string}
+            />
+            <span className={cn(isCollapsed ? "hidden" : "ml-2 block")}>
+              {user.email}
+            </span>
+          </div>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
@@ -40,7 +53,7 @@ const UserAccountNav = () => {
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem asChild className="">
             <Link href="/dashboard">Dashboard</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
