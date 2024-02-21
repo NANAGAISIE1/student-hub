@@ -17,10 +17,6 @@ interface DocumentIdPageProps {
 }
 
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
-  const Editor = useMemo(
-    () => dynamic(() => import("@/components/editor"), { ssr: false }),
-    [],
-  );
   const NovelEditor = useMemo(
     () => dynamic(() => import("@/components/editor/editor"), { ssr: false }),
     [],
@@ -61,7 +57,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
 
   return (
     <div className="container pb-40">
-      <Cover url={document.coverImage} />
+      <Cover url={document.coverImage} blurHash={document.coverImageBlurHash} />
       <div className="w-full">
         <Toolbar initialData={document} />
         <NovelEditor

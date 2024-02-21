@@ -15,8 +15,6 @@ export const coverImage = action({
       throw new Error("Not authenticated");
     }
 
-    // First check if query is familiar with a description in the unsplashImages table.
-
     const image: Doc<"unsplashImages"> = await ctx.runQuery(
       api.document.getUnsplashImage,
       {
@@ -24,16 +22,9 @@ export const coverImage = action({
       },
     );
 
-    if (image) {
-      const { url: photoUrl, blurHash } = image.photoData;
-      return { photoUrl, blurHash };
-    }
-
     if (!image) {
       const unsplash = createApi({
-        accessKey:
-          process.env.UNSPLASH_ACCESS_KEY ||
-          "twxi4cGxscnAOerGQI3b3xr4u4FL5b6qPzT-o42d2tE",
+        accessKey: process.env.UNSPLASH_ACCESS_KEY!,
       });
 
       const result = await unsplash.photos.getRandom({
@@ -84,5 +75,8 @@ export const coverImage = action({
 
       return { photoUrl, blurHash };
     }
+
+    const { url: photoUrl, blurHash } = image.photoData;
+    return { photoUrl, blurHash };
   },
 });

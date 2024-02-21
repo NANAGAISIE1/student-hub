@@ -4,87 +4,21 @@ export const defaultEditorContent = {
     {
       type: "heading",
       attrs: { level: 2 },
-      content: [{ type: "text", text: "Introducing Novel" }],
+      content: [{ type: "text", text: "Thermodynamics II" }],
     },
     {
       type: "paragraph",
       content: [
         {
           type: "text",
-          marks: [
-            {
-              type: "link",
-              attrs: {
-                href: "https://github.com/steven-tey/novel",
-                target: "_blank",
-              },
-            },
-          ],
-          text: "Novel",
-        },
-        {
-          type: "text",
-          text: " is a Notion-style WYSIWYG editor with AI-powered autocompletion. Built with ",
-        },
-        {
-          type: "text",
-          marks: [
-            {
-              type: "link",
-              attrs: {
-                href: "https://tiptap.dev/",
-                target: "_blank",
-              },
-            },
-          ],
-          text: "Tiptap",
-        },
-        { type: "text", text: " + " },
-        {
-          type: "text",
-          marks: [
-            {
-              type: "link",
-              attrs: {
-                href: "https://sdk.vercel.ai/docs",
-                target: "_blank",
-              },
-            },
-          ],
-          text: "Vercel AI SDK",
-        },
-        { type: "text", text: "." },
-      ],
-    },
-    {
-      type: "heading",
-      attrs: { level: 3 },
-      content: [{ type: "text", text: "Installation" }],
-    },
-    {
-      type: "codeBlock",
-      attrs: { language: null },
-      content: [{ type: "text", text: "npm i novel" }],
-    },
-    {
-      type: "heading",
-      attrs: { level: 3 },
-      content: [{ type: "text", text: "Usage" }],
-    },
-    {
-      type: "codeBlock",
-      attrs: { language: null },
-      content: [
-        {
-          type: "text",
-          text: 'import { Editor } from "novel";\n\nexport default function App() {\n  return (\n     <Editor />\n  )\n}',
+          text: "Thermodynamics II expands upon the foundational principles learned in Thermodynamics I, delving deeper into the intricacies of energy transfer, transformations, and equilibrium in various systems.",
         },
       ],
     },
     {
       type: "heading",
       attrs: { level: 3 },
-      content: [{ type: "text", text: "Features" }],
+      content: [{ type: "text", text: "Topics Covered" }],
     },
     {
       type: "orderedList",
@@ -95,21 +29,11 @@ export const defaultEditorContent = {
           content: [
             {
               type: "paragraph",
-              content: [{ type: "text", text: "Slash menu & bubble menu" }],
-            },
-          ],
-        },
-        {
-          type: "listItem",
-          content: [
-            {
-              type: "paragraph",
               content: [
-                { type: "text", text: "AI autocomplete (type " },
-                { type: "text", marks: [{ type: "code" }], text: "++" },
+                { type: "text", text: "Advanced Laws of Thermodynamics:" },
                 {
                   type: "text",
-                  text: " to activate, or select from slash menu)",
+                  text: " Further exploration of the First and Second Laws, including applications in real-world scenarios.",
                 },
               ],
             },
@@ -121,9 +45,55 @@ export const defaultEditorContent = {
             {
               type: "paragraph",
               content: [
+                { type: "text", text: "Thermodynamic Processes:" },
                 {
                   type: "text",
-                  text: "Image uploads (drag & drop / copy & paste, or select from slash menu) ",
+                  text: " In-depth analysis of reversible and irreversible processes, with a focus on entropy generation and thermodynamic efficiency.",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: "listItem",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                { type: "text", text: "Thermodynamic Cycles:" },
+                {
+                  type: "text",
+                  text: " Comprehensive study of thermodynamic cycles such as the Carnot Cycle, Rankine Cycle, and Refrigeration Cycle, including their applications in power generation and refrigeration.",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: "listItem",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                { type: "text", text: "Phase Equilibrium:" },
+                {
+                  type: "text",
+                  text: " Examination of phase diagrams, phase transitions, and equilibrium conditions in mixtures and solutions.",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: "listItem",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                { type: "text", text: "Applications in Engineering:" },
+                {
+                  type: "text",
+                  text: " Practical applications of thermodynamics in engineering disciplines, including power generation, refrigeration, and chemical processes.",
                 },
               ],
             },
@@ -132,98 +102,16 @@ export const defaultEditorContent = {
       ],
     },
     {
-      type: "image",
-      attrs: {
-        src: "https://public.blob.vercel-storage.com/pJrjXbdONOnAeZAZ/banner-2wQk82qTwyVgvlhTW21GIkWgqPGD2C.png",
-        alt: "banner.png",
-        title: "banner.png",
-        width: null,
-        height: null,
-      },
-    },
-    { type: "horizontalRule" },
-    {
       type: "heading",
       attrs: { level: 3 },
-      content: [{ type: "text", text: "Learn more" }],
+      content: [{ type: "text", text: "Conclusion" }],
     },
     {
-      type: "taskList",
+      type: "paragraph",
       content: [
         {
-          type: "taskItem",
-          attrs: { checked: false },
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                { type: "text", text: "Star us on " },
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "link",
-                      attrs: {
-                        href: "https://github.com/steven-tey/novel",
-                        target: "_blank",
-                      },
-                    },
-                  ],
-                  text: "GitHub",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "taskItem",
-          attrs: { checked: false },
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                { type: "text", text: "Install the " },
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "link",
-                      attrs: {
-                        href: "https://www.npmjs.com/package/novel",
-                        target: "_blank",
-                      },
-                    },
-                  ],
-                  text: "NPM package",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          type: "taskItem",
-          attrs: { checked: false },
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  marks: [
-                    {
-                      type: "link",
-                      attrs: {
-                        href: "https://vercel.com/templates/next.js/novel",
-                        target: "_blank",
-                      },
-                    },
-                  ],
-                  text: "Deploy your own",
-                },
-                { type: "text", text: " to Vercel" },
-              ],
-            },
-          ],
+          type: "text",
+          text: "Thermodynamics II provides students with a deep understanding of the fundamental principles governing energy transfer and transformations, equipping them with the knowledge necessary to tackle complex engineering and scientific challenges.",
         },
       ],
     },

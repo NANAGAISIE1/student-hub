@@ -30,6 +30,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const defaultLayout = [265, 800];
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
+
   return (
     <>
       <TooltipProvider delayDuration={0}>

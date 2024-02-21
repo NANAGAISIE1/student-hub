@@ -74,48 +74,10 @@ export const getUnsplashImage = query({
       throw new Error("Not authenticated");
     }
 
-    const imageWithSimilarTitle = await ctx.db
-      .query("unsplashImages")
-      .withSearchIndex("search_title", (q) =>
-        q.search("photoData.title", args.query as string),
-      )
-      .collect();
-
-    const imageWithSimilarDescription = await ctx.db
-      .query("unsplashImages")
-      .withSearchIndex("search_description", (q) =>
-        q.search("photoData.description", args.query as string),
-      )
-      .collect();
-
-    const combinedImageArray = [
-      ...imageWithSimilarTitle,
-      ...imageWithSimilarDescription,
-    ];
-
-    // Create a Set to filter out duplicate objects based on some unique identifier
-    const uniqueImageObjects = new Set();
-
-    // Filter the combined array to remove duplicate objects
-    const filteredImageArray = combinedImageArray.filter((item) => {
-      // Convert the object to a string to check for uniqueness
-      const objectString = JSON.stringify(item);
-
-      // If the objectString is not in the Set, add it and return true (keep the item)
-      if (!uniqueImageObjects.has(objectString)) {
-        uniqueImageObjects.add(objectString);
-        return true;
-      }
-
-      // If the objectString is already in the Set, return false (discard the item)
-      return false;
-    });
-
-    // Convert the filtered array back to an array of objects
-    const returnedImageArray = filteredImageArray.map((item) => item);
+    const imageFromConvexDB = await ctx.db.query("unsplashImages").collect();
 
     const mostSimilarFromArgs = findMostSimilarItem(
-      returnedImageArray,
+      imageFromConvexDB,
       args.query as string,
     );
 

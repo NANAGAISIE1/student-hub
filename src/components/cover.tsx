@@ -9,17 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCoverImage } from "@/hooks/store/use-cover-image";
 import { useEdgeStore } from "@/lib/edgestore";
-import { cn } from "@/lib/utils";
+import { cn, convertBlurHashToDataUrl } from "@/lib/utils";
 
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 
 interface CoverImageProps {
   url?: string;
+  blurHash?: string;
   preview?: boolean;
 }
 
-export const Cover = ({ url, preview }: CoverImageProps) => {
+export const Cover = ({ url, preview, blurHash }: CoverImageProps) => {
   const { edgestore } = useEdgeStore();
   const params = useParams();
   const coverImage = useCoverImage();
@@ -36,6 +37,8 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
     });
   };
 
+  const blurDataUrl = convertBlurHashToDataUrl(blurHash as string, 127, 100);
+
   return (
     <div
       className={cn(
@@ -44,7 +47,17 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
         url && "bg-muted",
       )}
     >
-      {!!url && <Image src={url} fill alt="Cover" className="object-cover" />}
+      {!!url && (
+        <Image
+          placeholder="blur"
+          blurDataURL={blurDataUrl as string}
+          src={url}
+          fill
+          alt="Cover"
+          className="object-cover"
+          quality={100}
+        />
+      )}
       {url && !preview && (
         <div className="absolute bottom-5 right-5 flex items-center gap-x-2 opacity-0 group-hover:opacity-100">
           <Button

@@ -90,7 +90,7 @@ export const SearchCommand = ({ isCollapsed }: { isCollapsed: boolean }) => {
 
       <CommandDialog open={isOpen} onOpenChange={onClose}>
         <CommandInput
-          placeholder={`Search ${user?.given_name}'s Jotion...`}
+          placeholder={`Search ${user?.given_name}'s notes...`}
           onValueChange={(value) => setSearchParam(value)}
         />
         <CommandList>

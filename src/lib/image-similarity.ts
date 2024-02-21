@@ -74,7 +74,7 @@ export function findMostSimilarItem(
     const overallSimilarity = (titleSimilarity + descriptionSimilarity) / 2;
 
     // Update most similar item if current item has higher similarity score
-    if (overallSimilarity > maxSimilarityScore) {
+    if (overallSimilarity >= 0.5 && overallSimilarity > maxSimilarityScore) {
       mostSimilarItem = item;
       maxSimilarityScore = overallSimilarity;
     }
